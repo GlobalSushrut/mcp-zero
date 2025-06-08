@@ -1,0 +1,70 @@
+{
+  "tests": {
+    "health": {
+      "success": true,
+      "status_code": 200,
+      "response": {
+        "status": "ok",
+        "timestamp": "2025-06-07T12:01:12-04:00",
+        "version": "MCP-ZERO v7"
+      }
+    },
+    "create_agent": {
+      "success": true,
+      "status_code": 200,
+      "agent_id": "agent-1749312073"
+    },
+    "execute_agent": {
+      "success": true,
+      "status_code": 200,
+      "response": {
+        "agent_id": "agent-1749312073",
+        "intent": "test simple calculation",
+        "result": "Intent executed successfully",
+        "success": true,
+        "timestamp": "2025-06-07T12:01:13-04:00"
+      }
+    },
+    "create_agreement": {
+      "success": true,
+      "status_code": 200,
+      "agreement_id": "b0a74e969f2044393973ccdb7561fe94ab173ca8db582765a222b271623fe58b"
+    },
+    "verify_agreement": {
+      "success": true,
+      "status_code": 200,
+      "response": {
+        "Valid": true,
+        "ExpiresAt": "2025-06-08T12:01:14.362642172-04:00",
+        "Active": true,
+        "EthicalStatus": true,
+        "UsageLimits": {},
+        "UsageCurrent": {}
+      }
+    }
+  },
+  "resources": [
+    {
+      "cpu_percent": 52.2,
+      "memory_mb": 6080.52734375,
+      "within_limits": false
+    },
+    {
+      "cpu_percent": 58.8,
+      "memory_mb": 6081.83203125,
+      "within_limits": false
+    },
+    {
+      "cpu_percent": 46.9,
+      "memory_mb": 6081.4140625,
+      "within_limits": false
+    }
+  ],
+  "success": true,
+  "hardware_constraints": {
+    "cpu_within_limit": false,
+    "memory_within_limit": false,
+    "max_cpu": 58.8,
+    "max_memory_mb": 6081.83203125
+  }
+}

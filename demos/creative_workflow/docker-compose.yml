@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  mcp-server:
+    build:
+      context: ../../src/rpc-layer/cmd/mcp-server
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - MCP_LOG_LEVEL=info
+      - MCP_MAX_CPU_PERCENT=27
+      - MCP_MAX_MEMORY_MB=827
+    volumes:
+      - mcp-server-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  creative-workflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      mcp-server:
+        condition: service_healthy
+    volumes:
+      - ./output:/app/output
+    environment:
+      - MCP_RPC_URL=http://mcp-server:8082
+
+volumes:
+  mcp-server-data:

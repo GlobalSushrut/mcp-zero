@@ -1,0 +1,37 @@
+# MCP-ZERO v7 Server Configuration
+
+# Service ports
+agent_port: 50051
+audit_port: 50052
+llm_port: 50053
+consensus_port: 50054
+metrics_port: 9090
+api_port: 8080
+
+# Database configuration
+mongo_uri: "mongodb://localhost:27017/mcp_zero"
+
+# Hardware constraints (MCP-ZERO v7 specification)
+max_cpu_percent: 27.0  # <27% 1-core i3 (2.4GHz)
+max_memory_mb: 827     # Peak 827MB
+avg_memory_mb: 640     # Average 640MB
+
+# Security settings
+enable_tls: false
+tls_cert_path: ""
+tls_key_path: ""
+enable_authentication: false
+auth_secret: ""
+
+# ZK and Solidity settings
+enable_zk: true             # Poseidon+ZKSync trace engine
+enable_solidity: true       # Solidity agreement enforcement
+enable_ethics_checking: true # Ethical governance built-in
+
+# Operational settings
+shutdown_timeout_secs: 30
+
+# Paths
+kernel_path: "../kernel/target/release/libmcp_core.so"
+plugin_dir: "./plugins"
+ethical_rules_file: "./ethical_rules.yaml"

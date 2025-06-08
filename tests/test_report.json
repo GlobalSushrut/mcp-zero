@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-06-07T12:01:15.444168",
+  "overall_success": true,
+  "success_rate": "1/1",
+  "component_results": {
+    "rpc": {
+      "success": true,
+      "duration": 3.328855037689209,
+      "exit_code": 0,
+      "resources": {
+        "duration_seconds": 3.329354,
+        "cpu": {
+          "avg": 40.45,
+          "max": 55.7,
+          "within_limit": false
+        },
+        "memory_mb": {
+          "avg": 6075.8515625,
+          "max": 6082.16015625,
+          "within_limit": false
+        }
+      }
+    }
+  },
+  "hardware_constraints": {
+    "cpu_within_limit": false,
+    "memory_within_limit": false,
+    "max_cpu_percent": 55.7,
+    "max_memory_mb": 6082.16015625
+  }
+}

@@ -1,0 +1,14 @@
+name: "demo-agent"
+entry_plugin: "core"
+intents:
+  - "default"
+  - "calculate"
+  - "store"
+  - "retrieve"
+hm:
+  cpu_limit: 10.0
+  memory_limit: 100
+metadata:
+  description: "MCP-ZERO Demo Agent"
+  version: "0.1.0"
+  created_by: "Windsurf Engineering"

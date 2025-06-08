@@ -1,0 +1,52 @@
+[package]
+name = "mcp-hm"
+version = "0.1.0"
+edition = "2021"
+authors = ["MCP-ZERO Team"]
+description = "Hardware manager for MCP-ZERO AI agent infrastructure"
+
+
+
+[dependencies]
+# Core dependencies
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"  # JSON serialization
+serde_yaml = "0.9"
+tokio = { version = "1.28", features = ["rt", "macros", "time"], default-features = false }
+anyhow = "1.0"
+thiserror = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+chrono = { version = "0.4", features = ["serde"] }  # Date and time handling
+
+# Resource monitoring - lightweight solutions
+sysinfo = "0.29"  # For system resource monitoring
+metrics = "0.21"  # For collecting metrics
+dashmap = "5.4"   # Concurrent hash map
+libc = "0.2"     # C library bindings
+
+# CLI support
+clap = { version = "4.4", features = ["derive"] }  # Command line argument parser
+
+# Communication with kernel
+tonic = { version = "0.9", features = ["tls"] }
+prost = "0.11"
+
+[build-dependencies]
+tonic-build = "0.9"
+
+[lib]
+name = "mcp_hm"
+path = "src/lib.rs"
+
+[[bin]]
+name = "mcp-hm"
+path = "src/main.rs"
+
+# Optimize for minimal resource usage
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

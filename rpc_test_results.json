@@ -1,0 +1,67 @@
+{
+  "tests": {
+    "health": {
+      "success": true,
+      "status_code": 200
+    },
+    "create_agent": {
+      "success": true,
+      "status_code": 200,
+      "agent_id": "agent-1749313842"
+    },
+    "execute_agent": {
+      "success": true,
+      "status_code": 200,
+      "response": {
+        "agent_id": "agent-1749313842",
+        "intent": "test simple calculation",
+        "result": "Intent executed successfully",
+        "success": true,
+        "timestamp": "2025-06-07T12:30:42-04:00"
+      }
+    },
+    "create_agreement": {
+      "success": true,
+      "status_code": 200,
+      "agreement_id": "4837b9c7c6fe01a6fd3ae0738990f5f88c98855c0d181fe07dac7a20b29f003c"
+    },
+    "verify_agreement": {
+      "success": true,
+      "status_code": 200,
+      "response": {
+        "Valid": true,
+        "ExpiresAt": "2025-06-08T12:31:11.585758116-04:00",
+        "Active": true,
+        "EthicalStatus": true,
+        "UsageLimits": {},
+        "UsageCurrent": {}
+      }
+    }
+  },
+  "resources": [
+    {
+      "cpu_percent": 33.3,
+      "memory_mb": 22.453125,
+      "within_limits": false
+    },
+    {
+      "cpu_percent": 50.0,
+      "memory_mb": 23.0859375,
+      "within_limits": false
+    },
+    {
+      "cpu_percent": 83.3,
+      "memory_mb": 23.0859375,
+      "within_limits": false
+    }
+  ],
+  "success": true,
+  "hardware_constraints": {
+    "cpu_within_limit": false,
+    "memory_within_limit": true,
+    "max_cpu": 100.0,
+    "max_memory_mb": 23.0859375,
+    "avg_cpu": 40.39,
+    "avg_mem": 23.0859375
+  }
+}

@@ -1,0 +1,55 @@
+name: "intelliagent"
+description: "Full-featured AI assistant demonstrating MCP-ZERO capabilities"
+entry_plugin: "core_assistant"
+version: "1.0.0"
+
+# Hardware constraints
+hm:
+  cpu: 15.0  # CPU limit of 15%
+  ram: 200   # RAM limit of 200MB
+
+# Allowed intents
+intents:
+  - "answer"
+  - "search"
+  - "analyze"
+  - "summarize"
+  - "recommend"
+  - "translate"
+  - "compute"
+
+# Ethical governance settings
+ethical:
+  bias_protection: true
+  fairness_check: true
+  safety_level: high
+  audit_trail: true
+
+# Plugin configurations
+plugins:
+  - id: "core_assistant"
+    type: "foundation"
+    priority: 1
+    
+  - id: "knowledge_base"
+    type: "extension"
+    priority: 2
+    
+  - id: "calculator"
+    type: "utility"
+    priority: 3
+    
+  - id: "language_translator"
+    type: "extension"
+    priority: 3
+    
+  - id: "cryptography"
+    type: "security"
+    priority: 4
+
+# Metadata for additional information
+metadata:
+  author: "MCP-ZERO Team"
+  created_at: "2025-06-07T02:31:00-04:00"
+  purpose: "Demonstrate comprehensive capabilities of MCP-ZERO v7"
+  domain: "general-purpose"

@@ -1,0 +1,276 @@
+syntax = "proto3";
+
+package mcp;
+
+option go_package = "github.com/mcp-zero/rpc-layer/api/mcp";
+
+// MCP Agent Service - Core RPC service for agent management
+service MCPAgentService {
+  // Spawn a new agent
+  rpc SpawnAgent(SpawnAgentRequest) returns (SpawnAgentResponse) {}
+  
+  // Attach plugin to agent
+  rpc AttachPlugin(AttachPluginRequest) returns (AttachPluginResponse) {}
+  
+  // Execute an intent
+  rpc ExecuteIntent(ExecuteIntentRequest) returns (ExecuteIntentResponse) {}
+  
+  // Take agent snapshot
+  rpc SnapshotAgent(SnapshotAgentRequest) returns (SnapshotAgentResponse) {}
+  
+  // Recover an agent
+  rpc RecoverAgent(RecoverAgentRequest) returns (RecoverAgentResponse) {}
+  
+  // List available agents
+  rpc ListAgents(ListAgentsRequest) returns (ListAgentsResponse) {}
+  
+  // Get agent info
+  rpc GetAgentInfo(GetAgentInfoRequest) returns (GetAgentInfoResponse) {}
+  
+  // Stream execution events
+  rpc StreamEvents(StreamEventsRequest) returns (stream EventMessage) {}
+}
+
+// Hardware Manager Service - Resource monitoring and constraints
+service MCPHardwareService {
+  // Get current resource stats
+  rpc GetResourceStats(GetResourceStatsRequest) returns (GetResourceStatsResponse) {}
+  
+  // Set resource allocation for an agent
+  rpc SetResourceAllocation(SetResourceAllocationRequest) returns (SetResourceAllocationResponse) {}
+  
+  // Generate resource report
+  rpc GenerateReport(GenerateReportRequest) returns (GenerateReportResponse) {}
+}
+
+// Plugin Service - Plugin management
+service MCPPluginService {
+  // Register a new plugin
+  rpc RegisterPlugin(RegisterPluginRequest) returns (RegisterPluginResponse) {}
+  
+  // List available plugins
+  rpc ListPlugins(ListPluginsRequest) returns (ListPluginsResponse) {}
+  
+  // Get plugin info
+  rpc GetPluginInfo(GetPluginInfoRequest) returns (GetPluginInfoResponse) {}
+}
+
+// Agent configuration model
+message AgentConfig {
+  string name = 1;
+  string entry_plugin = 2;
+  repeated string intents = 3;
+  HardwareConstraints hm = 4;
+  map<string, string> metadata = 5;
+}
+
+// Hardware constraints
+message HardwareConstraints {
+  float cpu_limit = 1;
+  uint32 memory_limit = 2;
+}
+
+// Resource statistics
+message ResourceStats {
+  float cpu_percent = 1;
+  uint32 memory_mb = 2;
+  string timestamp = 3;
+}
+
+// Plugin capability configuration
+message PluginCapabilities {
+  bool state_access = 1;
+  bool plugin_call = 2;
+  bool external_access = 3;
+  float cpu_limit = 4;
+  uint32 memory_limit = 5;
+  map<string, string> additional = 6;
+}
+
+// Plugin metadata
+message PluginMetadata {
+  string name = 1;
+  string version = 2;
+  string author = 3;
+  string description = 4;
+  string hash = 5;
+  map<string, string> additional = 6;
+}
+
+// Agent status enum
+enum AgentStatus {
+  ACTIVE = 0;
+  RECOVERED = 1;
+  PAUSED = 2;
+  TERMINATED = 3;
+}
+
+// Event message for streaming
+message EventMessage {
+  string id = 1;
+  string agent_id = 2;
+  string event_type = 3;
+  string data = 4;
+  string timestamp = 5;
+}
+
+// SpawnAgent request/response
+message SpawnAgentRequest {
+  AgentConfig config = 1;
+}
+
+message SpawnAgentResponse {
+  string agent_id = 1;
+  bool success = 2;
+  string error = 3;
+}
+
+// AttachPlugin request/response
+message AttachPluginRequest {
+  string agent_id = 1;
+  string plugin_id = 2;
+}
+
+message AttachPluginResponse {
+  bool success = 1;
+  string error = 2;
+}
+
+// ExecuteIntent request/response
+message ExecuteIntentRequest {
+  string agent_id = 1;
+  string intent = 2;
+  map<string, string> parameters = 3;
+}
+
+message ExecuteIntentResponse {
+  bool success = 1;
+  string result = 2;
+  string error = 3;
+  string trace_id = 4;
+}
+
+// SnapshotAgent request/response
+message SnapshotAgentRequest {
+  string agent_id = 1;
+}
+
+message SnapshotAgentResponse {
+  bool success = 1;
+  string error = 2;
+}
+
+// RecoverAgent request/response
+message RecoverAgentRequest {
+  string agent_id = 1;
+}
+
+message RecoverAgentResponse {
+  bool success = 1;
+  AgentStatus status = 2;
+  string error = 3;
+}
+
+// ListAgents request/response
+message ListAgentsRequest {
+  uint32 limit = 1;
+  uint32 offset = 2;
+}
+
+message ListAgentsResponse {
+  repeated string agent_ids = 1;
+  uint32 total = 2;
+}
+
+// GetAgentInfo request/response
+message GetAgentInfoRequest {
+  string agent_id = 1;
+}
+
+message GetAgentInfoResponse {
+  string agent_id = 1;
+  AgentConfig config = 2;
+  AgentStatus status = 3;
+  string created_at = 4;
+  string updated_at = 5;
+  map<string, string> state = 6;
+  bool success = 7;
+  string error = 8;
+}
+
+// StreamEvents request
+message StreamEventsRequest {
+  string agent_id = 1;
+  repeated string event_types = 2;
+  uint32 buffer_size = 3;
+}
+
+// GetResourceStats request/response
+message GetResourceStatsRequest {}
+
+message GetResourceStatsResponse {
+  ResourceStats stats = 1;
+  bool success = 2;
+  string error = 3;
+}
+
+// SetResourceAllocation request/response
+message SetResourceAllocationRequest {
+  string agent_id = 1;
+  float cpu_percent = 2;
+  uint32 memory_mb = 3;
+  uint32 priority = 4;
+}
+
+message SetResourceAllocationResponse {
+  bool success = 1;
+  string error = 2;
+}
+
+// GenerateReport request/response
+message GenerateReportRequest {
+  bool include_details = 1;
+}
+
+message GenerateReportResponse {
+  string report = 1;
+  bool success = 2;
+  string error = 3;
+}
+
+// RegisterPlugin request/response
+message RegisterPluginRequest {
+  string plugin_id = 1;
+  PluginCapabilities capabilities = 2;
+  PluginMetadata metadata = 3;
+  bytes wasm_module = 4;
+}
+
+message RegisterPluginResponse {
+  bool success = 1;
+  string error = 2;
+}
+
+// ListPlugins request/response
+message ListPluginsRequest {
+  uint32 limit = 1;
+  uint32 offset = 2;
+}
+
+message ListPluginsResponse {
+  repeated string plugin_ids = 1;
+  uint32 total = 2;
+}
+
+// GetPluginInfo request/response
+message GetPluginInfoRequest {
+  string plugin_id = 1;
+}
+
+message GetPluginInfoResponse {
+  string plugin_id = 1;
+  PluginCapabilities capabilities = 2;
+  PluginMetadata metadata = 3;
+  bool success = 4;
+  string error = 5;
+}

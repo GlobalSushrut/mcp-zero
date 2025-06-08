@@ -1,0 +1,14 @@
+id: "math-plugin"
+capabilities:
+  state_access: false
+  plugin_call: false
+  external_access: false
+  cpu_limit: 5.0
+  memory_limit: 50
+metadata:
+  name: "Math Operations Plugin"
+  version: "0.1.0"
+  author: "Windsurf Engineering"
+  description: "Basic mathematical operations for MCP-ZERO agents"
+# This will be set to actual path once we create the WASM file
+wasm_path: "../plugins/math_plugin.wasm"

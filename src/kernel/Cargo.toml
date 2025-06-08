@@ -1,0 +1,40 @@
+[package]
+name = "mcp-kernel"
+version = "0.1.0"
+edition = "2021"
+authors = ["MCP-ZERO Team"]
+description = "Core kernel for MCP-ZERO AI agent infrastructure"
+
+[dependencies]
+# Essential - minimal dependencies to maintain low memory footprint
+serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "0.9"
+serde_json = "1.0"
+tokio = { version = "1.28", features = ["rt-multi-thread", "macros", "sync", "time"], default-features = false }
+wasmtime = "10.0"
+blake3 = "1.4"  # Fast cryptographic hash
+sha3 = "0.10"   # For Poseidon hash computation
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+anyhow = "1.0"  # Error handling
+thiserror = "1.0"
+dashmap = "5.4"  # Concurrent hash map (more memory efficient than std::sync)
+chrono = { version = "0.4", features = ["serde"] }  # Date and time handling
+
+# FFI for Python bindings
+pyo3 = { version = "0.18", features = ["extension-module"], optional = true }
+
+[features]
+default = []
+python = ["pyo3"]
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+# Optimize for minimal resource usage
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

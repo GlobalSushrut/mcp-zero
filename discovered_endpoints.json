@@ -1,0 +1,79 @@
+{
+  "GET /api/v1/agents": {
+    "status_code": 200,
+    "response": {
+      "agents": [
+        "agent-0",
+        "agent-1",
+        "agent-2",
+        "agent-3",
+        "agent-4",
+        "agent-5",
+        "agent-6",
+        "agent-7",
+        "agent-8",
+        "agent-9"
+      ],
+      "limit": 10,
+      "offset": 0,
+      "total": 100
+    }
+  },
+  "POST /api/v1/agents": {
+    "status_code": 200,
+    "response": {
+      "agent_id": "agent-1749317808",
+      "created_at": "2025-06-07T13:36:48-04:00",
+      "status": "active"
+    }
+  },
+  "GET /api/v1/agents?limit=1": {
+    "status_code": 200,
+    "response": {
+      "agents": [
+        "agent-0"
+      ],
+      "limit": 1,
+      "offset": 0,
+      "total": 100
+    }
+  },
+  "GET /api/v1/agents/agent-0": {
+    "status_code": 200,
+    "response": {
+      "agent_id": "agent-0",
+      "created_at": "2025-06-06T13:36:48-04:00",
+      "name": "Mock Agent",
+      "plugins": [
+        "core"
+      ],
+      "status": "active",
+      "updated_at": "2025-06-07T13:36:48-04:00"
+    }
+  },
+  "GET /api/v1/agents/agent-0/plugins": {
+    "status_code": 405,
+    "response": {
+      "error": "Method not allowed for plugins endpoint"
+    }
+  },
+  "POST /api/v1/agents/agent-0/plugins": {
+    "status_code": 200,
+    "response": {
+      "agent_id": "agent-0",
+      "plugin_id": "discovery-test",
+      "success": true,
+      "timestamp": "2025-06-07T13:36:48-04:00"
+    }
+  },
+  "POST /api/v1/agents/agent-0/execute": {
+    "status_code": 200,
+    "response": {
+      "agent_id": "agent-0",
+      "intent": "test_intent",
+      "result": "Intent executed successfully",
+      "success": true,
+      "timestamp": "2025-06-07T13:36:48-04:00"
+    }
+  }
+}

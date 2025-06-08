@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+logs/
+
+# Output files from demos
+demos/creative_workflow/output/
+
+# Build artifacts
+target/
+*.o
+*.a
+*.so
+
+# Test results
+test-results.xml
+.pytest_cache/
+
+# Local configuration
+.env
+.local_config
+config.local.json

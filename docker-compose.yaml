@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  # API Server
+  marketplace-api:
+    build:
+      context: .
+      dockerfile: ./deploy/docker/marketplace_api.Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./marketplace/data:/app/marketplace/data
+      - ./agreements/storage:/app/agreements/storage
+      - ./config:/app/config
+    environment:
+      - MCP_API_PORT=8000
+      - MCP_API_KEYS=${MCP_API_KEYS:-test-key}
+      - MCP_API_DEBUG=false
+      - MCP_DB_PATH=/app/marketplace/data/marketplace.db
+      - MCP_LOG_LEVEL=INFO
+    restart: unless-stopped
+    depends_on:
+      - redis
+    networks:
+      - mcp-network
+
+  # Agreement Executor Service
+  agreement-executor:
+    build:
+      context: .
+      dockerfile: ./deploy/docker/agreement_executor.Dockerfile
+    volumes:
+      - ./agreements/storage:/app/agreements/storage
+      - ./marketplace/data:/app/marketplace/data
+      - ./config:/app/config
+    environment:
+      - MCP_API_KEYS=${MCP_API_KEYS:-test-key}
+      - MCP_LOG_LEVEL=INFO
+    restart: unless-stopped
+    depends_on:
+      - marketplace-api
+    networks:
+      - mcp-network
+
+  # Agent Deployment Service
+  deployment-service:
+    build:
+      context: .
+      dockerfile: ./deploy/docker/deployment_service.Dockerfile
+    volumes:
+      - ./deploy/agents:/app/deploy/agents
+      - ./deploy/plugins:/app/deploy/plugins
+      - ./config:/app/config
+    environment:
+      - MCP_API_KEYS=${MCP_API_KEYS:-test-key}
+      - MCP_LOG_LEVEL=INFO
+    restart: unless-stopped
+    depends_on:
+      - marketplace-api
+    networks:
+      - mcp-network
+
+  # Mesh Network Node (Optional)
+  mesh-node:
+    build:
+      context: .
+      dockerfile: ./deploy/docker/mesh_node.Dockerfile
+    ports:
+      - "8765:8765"
+    environment:
+      - MCP_MESH_ENABLED=true
+      - MCP_MESH_PORT=8765
+      - MCP_API_KEYS=${MCP_API_KEYS:-test-key}
+    restart: unless-stopped
+    networks:
+      - mcp-network
+
+  # Redis for caching and pub/sub
+  redis:
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    networks:
+      - mcp-network
+
+volumes:
+  redis-data:
+
+networks:
+  mcp-network:
+    driver: bridge

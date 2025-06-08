@@ -1,0 +1,22 @@
+name: "intelliagent"
+entry_plugin: "core_assistant"
+version: "1.0.0"
+
+# Hardware constraints match v7 requirements
+hm:
+  cpu: 15.0
+  ram: 200
+
+# Allowed intents
+intents:
+  - "answer"
+  - "search"
+  - "analyze"
+  - "translate"
+  - "compute"
+
+# Metadata
+metadata:
+  author: "MCP-ZERO Team"
+  created_at: "2025-06-07T02:45:00-04:00"
+  purpose: "Demo agent showcasing MCP-ZERO capabilities"
