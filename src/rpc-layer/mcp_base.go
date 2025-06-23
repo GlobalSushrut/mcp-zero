@@ -11,23 +11,27 @@ import (
 
 // ServerConfig holds the configuration for all MCP-ZERO services
 type ServerConfig struct {
-	AgentPort      int
-	AuditPort      int
-	LLMPort        int
-	ConsensusPort  int
-	MetricsPort    int
+	AgentPort           int
+	AuditPort           int
+	LLMPort             int
+	ConsensusPort       int
+	MetricsPort         int
+	APIPort             int
+	AccelerationPort    int  // Port for the Edge Runtime Booster
 	ShutdownTimeoutSecs int
 }
 
 // MCPServer coordinates all MCP-ZERO services
 type MCPServer struct {
-	config    *ServerConfig
-	shutdown  chan struct{}
-	wg        sync.WaitGroup
-	ctx       context.Context
-	cancel    context.CancelFunc
-	eventBus  *EventBus  // Event bus for service communication
-	dbService *DBService // Database service for agent memory persistence
+	config             *ServerConfig
+	shutdown           chan struct{}
+	wg                 sync.WaitGroup
+	ctx                context.Context
+	cancel             context.CancelFunc
+	eventBus           *EventBus         // Event bus for service communication
+	dbService          *DBService        // Database service for agent memory persistence
+	accelerationService *AccelerationService // Edge Runtime Booster service
+	startTime          time.Time         // Server start time
 }
 
 // NewMCPServer creates a new MCP-ZERO server instance
@@ -48,18 +52,22 @@ func NewMCPServer(config ServerConfig) *MCPServer {
 func (s *MCPServer) Start() error {
 	log.Println("Starting MCP-ZERO server with hardware constraints: <27% CPU, <827MB RAM")
 	
+	// Record server start time
+	s.startTime = time.Now()
+	
 	// Initialize the database service first
 	s.startDBService()
 	
 	// Start each service
-	s.wg.Add(4) // One for each service
+	s.wg.Add(5) // One for each service including acceleration
 	
 	go s.startAgentService()
 	go s.startAuditService()
 	go s.startLLMService()
 	go s.startConsensusService()
+	go s.startAccelerationService() // Start Edge Runtime Booster
 	
-	log.Println("MCP-ZERO server started with agent memory persistence")
+	log.Println("MCP-ZERO server started with agent memory persistence and edge acceleration")
 	
 	return nil
 }

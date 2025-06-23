@@ -1,0 +1,14 @@
+{
+  "agreement_id": "task-smart-agent-1749539350-1749539350",
+  "agent_id": "smart-agent-1749539350",
+  "deployed_at": 1749539350,
+  "max_tasks": 50,
+  "max_resource_usage": 500,
+  "expiration_time": 1752131350,
+  "ethical_policies": [
+    "content_safety",
+    "fair_use",
+    "data_privacy"
+  ],
+  "middleware_url": "http://localhost:50051"
+}

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+ #!/usr/bin/env python3
 """
 MCP-ZERO Marketplace API - Billing Endpoints
 REST API endpoints for the MCP-ZERO billing system

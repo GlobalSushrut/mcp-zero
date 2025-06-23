@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mcp-zero-editor-config
+  namespace: mcp-zero
+data:
+  editor_config.yaml: |
+    # MCP Zero Editor Service Configuration
+
+    # Service settings
+    service:
+      name: mcp-zero-editor
+      version: 0.1.0-beta
+      port: 8080
+
+    # Offline-first resilience settings
+    offline_resilience:
+      # Start in offline mode by default
+      start_offline: true
+      # Maximum connection attempts before permanent offline fallback (1 = try once only)
+      max_connection_attempts: 1
+      # Permanently switch to offline mode after connection failure
+      permanent_offline_fallback: true
+      # Cache timeout in seconds (0 = never expire)
+      cache_timeout: 0
+      # Local storage path for offline operations
+      local_storage_path: "/app/data/local_cache"
+
+    # Remote services configuration - only try once to connect
+    remote_services:
+      llm:
+        enabled: false  # Only enable if explicitly configured
+        endpoint: ""    # Must be provided at runtime
+        connection_timeout: 2  # Quick timeout (seconds)
+      
+      database:
+        enabled: false  # Only enable if explicitly configured
+        endpoint: ""    # Must be provided at runtime
+        connection_timeout: 2  # Quick timeout (seconds)

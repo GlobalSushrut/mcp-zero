@@ -5,6 +5,7 @@ go 1.13
 require (
 	github.com/prometheus/client_golang v1.7.1
 	github.com/shirou/gopsutil v2.20.9+incompatible
+	google.golang.org/grpc v1.73.0
 	gopkg.in/yaml.v2 v2.3.0
 )
 

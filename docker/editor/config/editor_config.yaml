@@ -1,0 +1,55 @@
+# MCP Zero Editor Service Configuration
+
+# Service settings
+service:
+  name: mcp-zero-editor
+  version: 0.1.0-beta
+  port: 8080
+
+# Offline-first resilience settings
+offline_resilience:
+  # Start in offline mode by default
+  start_offline: true
+  # Maximum connection attempts before permanent offline fallback (1 = try once only)
+  max_connection_attempts: 1
+  # Permanently switch to offline mode after connection failure
+  permanent_offline_fallback: true
+  # Cache timeout in seconds (0 = never expire)
+  cache_timeout: 0
+  # Local storage path for offline operations
+  local_storage_path: "/app/data/local_cache"
+
+# Remote services configuration
+remote_services:
+  llm:
+    enabled: false  # Only enable if explicitly configured
+    endpoint: ""    # Must be provided at runtime
+    connection_timeout: 2  # Quick timeout (seconds)
+    
+  database:
+    enabled: false  # Only enable if explicitly configured
+    endpoint: ""    # Must be provided at runtime
+    connection_timeout: 2  # Quick timeout (seconds)
+
+# Component-specific settings
+components:
+  analyzer:
+    default_mode: "offline"  # Start in offline mode
+    fallback_enabled: true   # Enable local fallbacks
+    
+  completion:
+    default_mode: "offline"  # Start in offline mode
+    fallback_enabled: true   # Enable local snippets
+    
+  refactor:
+    default_mode: "offline"  # Start in offline mode
+    fallback_enabled: true   # Enable local refactoring
+
+  memory:
+    default_mode: "offline"  # Start in offline mode
+    local_storage_enabled: true  # Store memories locally
+
+# Telemetry settings (minimal by default)
+telemetry:
+  enabled: false
+  anonymous_usage_stats: false

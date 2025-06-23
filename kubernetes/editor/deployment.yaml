@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-zero-editor
+  namespace: mcp-zero
+  labels:
+    app: mcp-zero-editor
+    component: editor
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mcp-zero-editor
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: mcp-zero-editor
+    spec:
+      containers:
+      - name: editor
+        image: mcp-zero/editor:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        env:
+        - name: MCP_OFFLINE_FIRST
+          value: "true"
+        - name: MCP_CONNECTION_ATTEMPTS
+          value: "1"
+        - name: MCP_START_OFFLINE
+          value: "true"
+        - name: MCP_SERVICE_CHECK_URL
+          value: "http://mcp-zero-llm.mcp-zero.svc.cluster.local:8081/health"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: editor-config
+          mountPath: /app/config
+        - name: local-cache
+          mountPath: /app/data/local_cache
+      volumes:
+      - name: editor-config
+        configMap:
+          name: mcp-zero-editor-config
+      - name: local-cache
+        emptyDir: {}  # For demo purposes, in production this would be persistent storage

@@ -86,6 +86,44 @@ services:
     restart: unless-stopped
     networks:
       - mcp-network
+      
+  # MCP Zero Editor Service
+  mcp-zero-editor:
+    build:
+      context: .
+      dockerfile: ./docker/editor/Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./editor:/app/editor
+      - ./docker/editor/config:/app/config
+      - mcp-editor-data:/app/data
+    environment:
+      - MCP_OFFLINE_FIRST=true
+      - MCP_CONNECTION_ATTEMPTS=1
+      - MCP_START_OFFLINE=true
+      - MCP_SERVICE_CHECK_URL=http://mcp-zero-llm:8081/health
+    restart: unless-stopped
+    networks:
+      - mcp-network
+
+  # MCP Zero LLM Service
+  mcp-zero-llm:
+    build:
+      context: .
+      dockerfile: ./docker/llm/Dockerfile
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./llm:/app/llm
+      - ./docker/llm/config:/app/config
+      - mcp-llm-data:/app/data
+    environment:
+      - MCP_OFFLINE_FIRST=true
+      - MCP_CONNECTION_ATTEMPTS=1
+    restart: unless-stopped
+    networks:
+      - mcp-network
 
 volumes:
   redis-data:
