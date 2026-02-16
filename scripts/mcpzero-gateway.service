@@ -1,0 +1,26 @@
+[Unit]
+Description=MCP-ZERO Go Gateway
+Documentation=https://github.com/GlobalSushrut/mcp-zero
+After=mcpzero-kernel.service
+Requires=mcpzero-kernel.service
+
+[Service]
+Type=simple
+User=mcpzero
+Group=mcpzero
+ExecStart=/opt/mcpzero/bin/gateway -addr :8080 -db /var/lib/mcpzero/gateway -kernel /run/mcpzero/kernel.sock
+Environment=MCP_API_KEY=
+Environment=MCP_RATE_LIMIT=100
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/mcpzero /run/mcpzero
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

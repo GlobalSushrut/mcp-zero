@@ -1,0 +1,110 @@
+name: MCP-ZERO Creative Workflow Demo
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'demos/creative_workflow/**'
+      - '.github/workflows/creative-workflow-demo.yml'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'demos/creative_workflow/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f demos/creative_workflow/requirements.txt ]; then
+          pip install -r demos/creative_workflow/requirements.txt
+        else
+          pip install pytest requests
+        fi
+    
+    - name: Start MCP-ZERO RPC server
+      run: |
+        cd src/rpc-layer/cmd/mcp-server
+        go build -o mcp-server
+        ./mcp-server &
+        sleep 5
+        # Verify server is running
+        curl -s http://localhost:8082/health || echo "Server not running"
+    
+    - name: Run creative workflow demo
+      run: |
+        cd demos/creative_workflow
+        python3 run_creative_demo.py --mock || exit 1
+        
+    - name: Run tests with resource constraints
+      run: |
+        cd demos/creative_workflow
+        python3 test_creative_workflow.py
+    
+    - name: Hardware constraints verification
+      run: |
+        echo "Verifying demo operates within hardware constraints (<27% CPU, <827MB RAM)"
+        # Check if the resource monitoring logs show any violations
+        if grep -q "exceeds MCP-ZERO limit" demos/creative_workflow/output/*.log; then
+          echo "Hardware constraint violation detected!"
+          exit 1
+        else
+          echo "Hardware constraints satisfied."
+        fi
+  
+  ethical-compliance:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Verify ethical governance
+      run: |
+        cd demos/creative_workflow
+        python3 -c "
+import json
+import sys
+import os
+
+# Check output files for ethical compliance markers
+output_dir = 'output'
+if not os.path.exists(output_dir):
+    print('Output directory not found')
+    sys.exit(1)
+
+# Find project metadata file
+metadata_files = [f for f in os.listdir(output_dir) if f.endswith('_metadata.json')]
+if not metadata_files:
+    print('No metadata files found')
+    sys.exit(1)
+
+with open(os.path.join(output_dir, metadata_files[0])) as f:
+    metadata = json.load(f)
+
+# Check for agreement hash
+if 'agreement_hash' not in metadata:
+    print('Agreement hash missing from metadata')
+    sys.exit(1)
+    
+print('Ethical governance verification passed')
+        "

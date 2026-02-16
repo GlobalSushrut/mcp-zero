@@ -1,0 +1,63 @@
+# ============================================
+# MCP-ZERO .gitignore
+# Edge AI system — keep it lean
+# ============================================
+
+# Rust build artifacts
+target/
+
+# Go build artifacts
+src/gateway/gateway
+*.exe
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+venv/
+ENV/
+
+# Runtime data (generated on device)
+*.db
+*.sock
+data/
+logs/
+*.log
+
+# Runtime state
+.mcpzero/
+*.lock
+!Cargo.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local config overrides
+.env
+config.local.yaml
+
+# Test artifacts
+.pytest_cache/
+test-results.xml
+htmlcov/
+.coverage
+
+# Models (too large for git)
+*.gguf
+*.bin
+models/
+
+# Archived old code (reference only, not shipped)
+burn_folder/

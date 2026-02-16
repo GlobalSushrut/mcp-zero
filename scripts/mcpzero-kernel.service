@@ -1,0 +1,30 @@
+[Unit]
+Description=MCP-ZERO Rust Kernel
+Documentation=https://github.com/GlobalSushrut/mcp-zero
+After=network.target
+
+[Service]
+Type=simple
+User=mcpzero
+Group=mcpzero
+ExecStart=/opt/mcpzero/bin/mcp-kernel
+Environment=MCP_KERNEL_SOCKET=/run/mcpzero/kernel.sock
+Environment=MCP_STORAGE_DIR=/var/lib/mcpzero/kernel
+Environment=MCP_COG_DIM=64
+Environment=MCP_EMBED_DIM=384
+Environment=RUST_LOG=info
+RuntimeDirectory=mcpzero
+StateDirectory=mcpzero/kernel
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/mcpzero /run/mcpzero
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

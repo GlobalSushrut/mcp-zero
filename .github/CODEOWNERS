@@ -1,0 +1,22 @@
+# Default owners for everything
+* @GlobalSushrut/core-maintainers
+
+# ZETA components specialists
+/components/zetacuda/ @GlobalSushrut/zeta-maintainers
+/components/zetatensor/ @GlobalSushrut/zeta-maintainers
+/components/zetaface/ @GlobalSushrut/zeta-maintainers
+/components/zeta_llm/ @GlobalSushrut/zeta-maintainers
+
+# Contract system specialists
+/src/contracts/ @GlobalSushrut/contract-maintainers
+/agents/*/contracts/ @GlobalSushrut/contract-maintainers
+
+# Healthcare Revolution demo specialists
+/demo/healthcare-revolution/ @GlobalSushrut/healthcare-maintainers
+
+# Offline resilience pattern experts
+/src/resilience/ @GlobalSushrut/resilience-experts
+/tests/offline_resilience/ @GlobalSushrut/resilience-experts
+
+# CI/CD pipeline
+/.github/workflows/ @GlobalSushrut/devops-team
